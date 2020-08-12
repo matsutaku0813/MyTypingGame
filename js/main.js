@@ -12,7 +12,7 @@
   let loc;
   let score;
   let miss;
-  const timeLimit = 3 * 1000;
+  const timeLimit = 15 * 1000;
   let startTime;
   let isPlaying = false;
 
@@ -44,30 +44,52 @@
         showResult();
       }, 100);
 
-      target.textContent = 'Click to replay.';
+      target.textContent = 'Press Spacebar to replay.';
     }
   }
 
   function showResult() {
     const accuracy = score + miss === 0 ? 0 : score / (score + miss) * 100;
-    alert(`${score}letters,${miss}misses,${accuracy.toFixed(2)}% accuracy!`)
+    const wpm = ((score + miss) / timeLimit) * 60 * 1000;
+    console.log(wpm);
+    alert(`${score}letters\n` + `${miss}misses\n` + `${accuracy.toFixed(2)}% accuracy!\n` + `wpm : ${wpm.toFixed(2)}`)
   }
 
-  window.addEventListener('click', () => {
-    if (isPlaying === true) {
-      return;
-    }
-    isPlaying = true;
-    loc=0;
-    score = 0;
-    miss = 0;
-    scoreLabel.textContent = score;
-    missLabel.textContent = miss;
-    word = words[Math.floor(Math.random() * words.length)];
+  // window.addEventListener('click', () => {
+  //   if (isPlaying === true) {
+  //     return;
+  //   }
+  //   isPlaying = true;
+  //   loc = 0;
+  //   score = 0;
+  //   miss = 0;
+  //   scoreLabel.textContent = score;
+  //   missLabel.textContent = miss;
+  //   word = words[Math.floor(Math.random() * words.length)];
 
-    target.textContent = word;
-    startTime = Date.now();
-    updateTimer();
+  //   target.textContent = word;
+  //   startTime = Date.now();
+  //   updateTimer();
+  // });
+
+  window.addEventListener('keydown', event => {
+    let keyCode = event.keyCode;
+    if (keyCode == 32) {
+      if (isPlaying === true) {
+        return;
+      }
+      isPlaying = true;
+      loc = 0;
+      score = 0;
+      miss = 0;
+      scoreLabel.textContent = score;
+      missLabel.textContent = miss;
+      word = words[Math.floor(Math.random() * words.length)];
+
+      target.textContent = word;
+      startTime = Date.now();
+      updateTimer();
+    }
   });
 
   window.addEventListener('keydown', e => {
